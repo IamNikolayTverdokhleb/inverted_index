@@ -1,8 +1,11 @@
 import os, sys, string, codecs
-from CranReader import *
+import CranReader as CR
 
 if __name__ == '__main__':
     print("Read files ")
-    rd = CranReader('./CRANFIELD/cran.all.1400', "read_text")
+    rd = CR.CranReader('./CRANFIELD/cran.all.1400', "read_text")
     rd.read()
+    rd.tokenize()
+    rd.word_stemmer()
+    rd.remove_stopwords()
 
