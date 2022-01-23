@@ -12,14 +12,13 @@ class CranReader:
         txts = []
         with codecs.open(self.path, 'r', 'utf-8') as f:
             line = f.readline()
-            while line:
+            while len(line.strip()) > 0:
                 if line.strip() == ".W":
                     temp = []
-                    while (not line.strip().find(".I")) or line.strip() != ".T" or line:
-                        print("While not Line ", line)
+                    line = f.readline()
+                    while (not line.strip().find(".I")) or line.strip() != ".T" and len(line.strip()) != 0:
                         temp.append(line.strip())
                         line = f.readline()
-                    print("TEMP = ", temp)
                     txts.append(temp)
                 line = f.readline()
 
