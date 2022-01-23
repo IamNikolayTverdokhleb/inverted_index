@@ -1,4 +1,3 @@
-import os, sys, string, codecs
 import CranReader as CR
 import Preprocessing as PR
 
@@ -11,8 +10,12 @@ if __name__ == '__main__':
     p.tokenize()
     p.remove_stopwords()
     p.word_stemmer()
+
+    print(p.stem_clean_tokens)
+
+    p.vectorizer()
     
-    print(p.stem_tokens)
+
     
 
 
