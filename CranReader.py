@@ -9,8 +9,6 @@ import re
 
 class CranReader:
     def __init__(self, path, mode):
-        """
-        """
         self.path = path
         self.mode = mode
 
