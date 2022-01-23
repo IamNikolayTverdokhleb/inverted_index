@@ -22,10 +22,8 @@ class CranReader:
                     txts.append(temp)
                 line = f.readline()
 
-        txts = np.array(txts)
-        print(txts.shape)
+        self.txts = np.array(txts, dtype=list)
         print(txts)
-        print(len(txts))
 
     def read(self):
         if self.mode == "read_query":
