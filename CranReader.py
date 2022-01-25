@@ -1,18 +1,36 @@
 import codecs
-import numpy as np
-import nltk
-from nltk.corpus import stopwords
-import re
 
-# nltk.download('punkt')
-# nltk.download('stopwords')
 
 class CranReader:
+    """
+    This class provides some methods to read data
+    from CRANFIELD dataset.
+    """
     def __init__(self, path, mode):
-        self.path = path
-        self.mode = mode
+        self.path = path # path to the CRANFIELD file
+        self.mode = mode #read_query, read_text or read_all
+
+    def read(self):
+        """
+        This is a wrapper method around
+        the reading functions depending on the mode
+        """
+        if self.mode == "read_query":
+            self.read_query()
+        elif self.mode == "read_all":
+            self.read_all()
+        elif self.mode == "read_text":
+            self.read_text()
+        else:
+            print("There is no such mode")
 
     def read_text(self):
+        """
+        This method reads all the text documents from CRANFIELD file,
+        i.e. all the lines in between ".W" and ".I" tags.
+        It writes them to self.txts, which is an array of strings,
+        and the length is equal to the number of documents in the file.
+        """
         self.txts = []
         with codecs.open(self.path, 'r', 'utf-8') as f:
             line = f.readline()
@@ -28,37 +46,4 @@ class CranReader:
                             break
                     self.txts.append(str(' '.join(temp)))
                 line = f.readline()
-
-        # self.txts = str(' '.join(self.txts))
-
-    def read(self):
-        if self.mode == "read_query":
-            self.read_query()
-        elif self.mode == "read_all":
-            self.read_all()
-        elif self.mode == "read_text":
-            self.read_text()
-        else:
-            print("There is no such mode")
-
-    def tokenize(self):
-        self.tokens = []
-        for text in self.txts:
-            text = re.sub('[^A-Za-z]+', ' ', text)
-            self.tokens.append(nltk.word_tokenize(text))
-
-    def word_stemmer(self):
-        ps = nltk.stem.PorterStemmer()
-        self.stem_tokens = []
-        for token in self.tokens:
-            temp = []
-            for words in token:
-                temp.append(ps.stem(words))
-            self.stem_tokens.append(temp)
-
-    def remove_stopwords(self):
-        stop_words = set(stopwords.words('english'))
-        self.clean_stem_tokens = [[word for word in token if word not in stop_words] for token in self.stem_tokens]
-
-
 
