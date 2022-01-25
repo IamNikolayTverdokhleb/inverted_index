@@ -55,10 +55,12 @@ class VectorSpaceModel:
         This method calculates cosine similarities between the query
         and the corpus and returns indexes of best matches
         """
+        # Projecting query on our vector space
         query_vector = self.vectorizerX.transform([clean_query])
+        # Calculating cosine similarity between query and docs
         cosineSimilarities = cosine_similarity(self.doc_vector, query_vector).flatten()
         related_docs_indices = cosineSimilarities.argsort()[:-10:-1]
-        print(related_docs_indices)
+        print("Related docs indices with SVM", related_docs_indices)
 
         return related_docs_indices
 

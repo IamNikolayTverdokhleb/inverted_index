@@ -1,6 +1,7 @@
 import CranReader as CR
 import Preprocessing as PR
 import VectorSpaceModel as VSM
+import LanguageModel as LM
 
 if __name__ == '__main__':
     # Reading corpus
@@ -18,23 +19,35 @@ if __name__ == '__main__':
     p_qrs = PR.Preprocessing(qrs.txts)
     p_qrs.perform_preprocessing()
 
+    # Choosing query
+    query_index = 8
+    print("Clean   query = ", p_qrs.clean_corpus[query_index - 1])
+    print("Initial query = ", qrs.txts[query_index - 1])
+
 
     # Creating Vector Space Model with preprocessed corpus
+    print("Creating Vector Space Model with preprocessed corpus")
     vsm = VSM.VectorSpaceModel(p.clean_corpus)
     vsm.calculate_inverted_index()
 
     # Querying with VSM
-    query_index = 8
-    related_docs_indices = vsm.calculate_cos_similarity(p_qrs.clean_corpus[query_index - 1])
-    print("Clean   query = ", p_qrs.clean_corpus[query_index - 1])
-    print("Initial query = ", qrs.txts[query_index - 1])
-    print("")
-    print("")
-    for i in related_docs_indices[:3]:
+    related_docs_indices_vsm = vsm.calculate_cos_similarity(p_qrs.clean_corpus[query_index - 1])
+
+    # Printing 3 of the best matches for VSM
+    for i in related_docs_indices_vsm[:3]:
         data = [rd.txts[i]]
         print(data)
-        print(i+1)
 
+    # Creating Language Model with preprocessed corpus
+    print("Creating Language Model with preprocessed corpus")
+    lm = LM.LanguageModel(p.stem_clean_tokens, p.clean_corpus)
+    lm.calculate_TF_IDF()
+    related_docs_indices_lm = lm.query_likelihood(p_qrs.stem_clean_tokens[query_index - 1])
+
+    # Printing 3 of the best matches for LM with query likelyhood
+    for i in related_docs_indices_lm[:3]:
+        data = [rd.txts[i]]
+        print(data)
 
 
 
